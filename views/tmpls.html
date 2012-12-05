@@ -1,0 +1,171 @@
+    <!-- =================================== -->
+    <!--    Templates                        -->
+	<!-- =================================== -->
+	
+	<script type="text/template" id="homeTemplate">
+    	<div class="wrap">
+            <div id="projects"></div>
+            <a class="new" href="#">+ New</a>
+    	</div>
+	</script>
+	
+	<script type="text/template" id="ProjectMenuItem">
+        <a class="show">&raquo;</a>
+        <h2><%= name %></h2>
+	</script>
+	
+	
+	<script type="text/template" id="showProjectTemplate">
+    	<div class="wrap">
+            <div class="projectInfo">
+                <h2><%= name %></h2> 
+            </div>
+            <div class="projectTasks"></div>
+            <a href="#" class="new">+</a>
+    	</div>
+	</script>
+	
+	<script type="text/template" id="taskTemplate">
+    	<h4><%= name %></h4>
+        <div class="notes"></div>
+	</script>
+
+    <script type="text/template" id="noteTemplate">
+        <p contentEditable="true" ><%= text %></p>
+        <a class="del" href="#">-</a>
+    </script>
+	
+	<script type="text/template" id="entryFormTemplate">
+    	<h3>New Entry</h3>
+    	<label for="title">Title</label>
+    	<input type="text" name="title" value="<%= title %>">
+    	
+    	<label for="description">Description</label>
+    	<textarea name="description" rows="5" cols="25"></textarea>
+    	
+    	<label for="released">Released</label>
+    	<input type="text" name="released" value="<%= new Date().toGMTString() %>">
+    	
+    	<label for="duration">Duration</label>
+    	<input type="text" name="duration">
+    	
+    	<label>File</label>
+    	<p><%= fileName %>  (<%= fileSize %>)</p>
+    	
+    	<input type="submit" name="save" id="save" value="Save">
+    	
+    	<progress id="progress" min="0" max="0" value="0">0</progress>
+	</script>
+	
+	<script type="text/template" id="podcastFormTemplate">
+    	<form id="podcastForm" class="wrap clearfix">
+            
+            <div>
+                <label for="title">Title</label>
+                <input type="text" name="title" value="<%= title %>">
+
+                <label for="author">Author</label>
+                <input type="text" name="author" value="<%= author %>">	
+
+                <label for="owner">Owner</label>
+                <input type="text" name="owner" value="<%= owner %>">
+
+                <label for="owner_email">Owner Email</label>
+                <input type="text" name="owner_email" value="<%= owner_email %>">
+
+                <label for="copyright">Copyright</label>
+                <input type="text" name="copyright" value="<%= copyright %>">
+                   
+                <label for="category_id">Category</label>
+                <select name="category_id" id="category_id">
+                        <option value="1" label="Arts">Arts</option>
+                        <option value="2" label="Arts - Design">Arts - Design</option>
+                        <option value="3" label="Arts - Fashion &amp; Beauty">Arts - Fashion &amp; Beauty</option>
+                        <option value="4" label="Arts - Food">Arts - Food</option>
+                        <option value="5" label="Arts - Literature">Arts - Literature</option>
+                        <option value="6" label="Arts - Performing Arts">Arts - Performing Arts</option>
+                        <option value="7" label="Arts - Visual Arts">Arts - Visual Arts</option>
+                        <option value="8" label="Business">Business</option>
+                        <option value="9" label="Business - Business News">Business - Business News</option>
+                        <option value="10" label="Business - Careers">Business - Careers</option>
+                        <option value="11" label="Business - Investing">Business - Investing</option>
+                        <option value="12" label="Business - Management &amp; Marketing">Business - Management &amp; Marketing</option>
+                        <option value="13" label="Business - Shopping">Business - Shopping</option>
+                        <option value="14" label="Comedy">Comedy</option>
+                        <option value="15" label="Education">Education</option>
+                        <option value="16" label="Education - Education Technology">Education - Education Technology</option>
+                        <option value="17" label="Education - Higher Education">Education - Higher Education</option>
+                        <option value="18" label="Education - K-12">Education - K-12</option>
+                        <option value="19" label="Education - Language Courses">Education - Language Courses</option>
+                        <option value="20" label="Education - Training">Education - Training</option>
+                        <option value="21" label="Games &amp; Hobbies">Games &amp; Hobbies</option>
+                        <option value="22" label="Games &amp; Hobbies - Automotive">Games &amp; Hobbies - Automotive</option>
+                        <option value="23" label="Games &amp; Hobbies - Aviation">Games &amp; Hobbies - Aviation</option>
+                        <option value="24" label="Games &amp; Hobbies - Hobbies">Games &amp; Hobbies - Hobbies</option>
+                        <option value="25" label="Games &amp; Hobbies - Other Games">Games &amp; Hobbies - Other Games</option>
+                        <option value="26" label="Games &amp; Hobbies - Video Games">Games &amp; Hobbies - Video Games</option>
+                        <option value="27" label="Government &amp; Organizations">Government &amp; Organizations</option>
+                        <option value="28" label="Government &amp; Organizations - Local">Government &amp; Organizations - Local</option>
+                        <option value="29" label="Government &amp; Organizations - National">Government &amp; Organizations - National</option>
+                        <option value="30" label="Government &amp; Organizations - Non-Profit">Government &amp; Organizations - Non-Profit</option>
+                        <option value="31" label="Government &amp; Organizations - Regional">Government &amp; Organizations - Regional</option>
+                        <option value="32" label="Health">Health</option>
+                        <option value="33" label="Health - Alternative Health">Health - Alternative Health</option>
+                        <option value="34" label="Health - Fitness &amp; Nutrition">Health - Fitness &amp; Nutrition</option>
+                        <option value="35" label="Health - Self-Help">Health - Self-Help</option>
+                        <option value="36" label="Health - Sexuality">Health - Sexuality</option>
+                        <option value="37" label="Kids &amp; Family">Kids &amp; Family</option>
+                        <option value="38" label="Music">Music</option>
+                        <option value="39" label="News &amp; Politics">News &amp; Politics</option>
+                        <option value="40" label="Religion &amp; Spirituality">Religion &amp; Spirituality</option>
+                        <option value="41" label="Religion &amp; Spirituality - Buddhism">Religion &amp; Spirituality - Buddhism</option>
+                        <option value="42" label="Religion &amp; Spirituality - Christianity" selected="selected">Religion &amp; Spirituality - Christianity</option>
+                        <option value="43" label="Religion &amp; Spirituality - Hinduism">Religion &amp; Spirituality - Hinduism</option>
+                        <option value="44" label="Religion &amp; Spirituality - Islam">Religion &amp; Spirituality - Islam</option>
+                        <option value="45" label="Religion &amp; Spirituality - Judaism">Religion &amp; Spirituality - Judaism</option>
+                        <option value="46" label="Religion &amp; Spirituality - Other">Religion &amp; Spirituality - Other</option>
+                        <option value="47" label="Religion &amp; Spirituality - Spirituality">Religion &amp; Spirituality - Spirituality</option>
+                        <option value="48" label="Science &amp; Medicine">Science &amp; Medicine</option>
+                        <option value="49" label="Science &amp; Medicine - Medicine">Science &amp; Medicine - Medicine</option>
+                        <option value="50" label="Science &amp; Medicine - Natural Sciences">Science &amp; Medicine - Natural Sciences</option>
+                        <option value="51" label="Science &amp; Medicine - Social Sciences">Science &amp; Medicine - Social Sciences</option>
+                        <option value="52" label="Society &amp; Culture">Society &amp; Culture</option>
+                        <option value="53" label="Society &amp; Culture - History">Society &amp; Culture - History</option>
+                        <option value="54" label="Society &amp; Culture - Personal Journals">Society &amp; Culture - Personal Journals</option>
+                        <option value="55" label="Society &amp; Culture - Philosophy">Society &amp; Culture - Philosophy</option>
+                        <option value="56" label="Society &amp; Culture - Places &amp;amp Travel">Society &amp; Culture - Places &amp;amp Travel</option>
+                        <option value="57" label="Sports &amp; Recreation">Sports &amp; Recreation</option>
+                        <option value="58" label="Sports &amp; Recreation - Amateur">Sports &amp; Recreation - Amateur</option>
+                        <option value="59" label="Sports &amp; Recreation - College &amp; High School">Sports &amp; Recreation - College &amp; High School</option>
+                        <option value="60" label="Sports &amp; Recreation - Outdoor">Sports &amp; Recreation - Outdoor</option>
+                        <option value="61" label="Sports &amp; Recreation - Professional">Sports &amp; Recreation - Professional</option>
+                        <option value="62" label="Technology">Technology</option>
+                        <option value="63" label="Technology - Gadgets">Technology - Gadgets</option>
+                        <option value="64" label="Technology - Tech News">Technology - Tech News</option>
+                        <option value="65" label="Technology - Podcasting">Technology - Podcasting</option>
+                        <option value="66" label="Technology - Software How-To">Technology - Software How-To</option>
+                        <option value="67" label="TV &amp; Film">TV &amp; Film</option>
+                    </select>
+            </div>
+            
+            <div>
+            	<label for="description">Description</label>
+            	<textarea name="description" rows="5" cols="25"><%= description %></textarea>
+        	</div>
+            
+            <div class="well">
+                <span class="thumb">
+                    <% if(typeof(image) != 'undefined' && image) { %>
+	                <img id="picture" src="uploads/<%= image %>">
+	                <% } else { %>
+	                <img id="picture" src="">
+	                <% } %>
+                </span>
+                <p>Drag your photo here to replace</p>
+            </div>
+            <hr />
+        	<input type="submit" name="save" id="save" value="Save">
+        	
+        	<span class="close"></span>
+        </form>
+	</script>

@@ -1,0 +1,38 @@
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;font-size:100%;font:inherit;vertical-align:baseline;margin:0;padding:0;}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block;}
+body{line-height:1;}
+ol,ul{list-style:none;}
+blockquote,q{quotes:none;}
+blockquote:before,blockquote:after,q:before,q:after{content:none;}
+table{border-collapse:collapse;border-spacing:0;}
+.clearfix:after{content:"";display:table;clear:both;}
+@-webkit-keyframes slideIn{0%{height:0;} 100%{height:429px;}}body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;}
+h1{font-size:1.6em;}
+h2{font-size:1.6em;}
+h3{font-size:1.1em;font-weight:bold;padding:5px 0;}
+a{text-decoration:none;color:#4f5d64;}
+p,ol,ul{font-size:0.875em;padding:3px 0;line-height:1.3;}
+.wrap{width:700px;margin:50px auto;position:relative;}
+body{background-color:#e0e4e6;}
+header{padding:10px 0;margin-bottom:20px;}header h1{display:inline-block;color:#4f5d64;text-transform:lowercase;}
+header nav{float:right;width:30%;}header nav ul{text-align:right;}header nav ul li{display:inline-block;margin-left:5px;}header nav ul li a{display:block;padding:5px;color:#4f5d64;}
+#home .ProjectMenuItem{cursor:pointer;padding:10px;}#home .ProjectMenuItem a{display:block;float:right;}
+#home .ProjectMenuItem:hover{background-color:#d5dbdd;}
+#showProject .wrap{padding-bottom:50px;}
+#showProject h2{margin-bottom:20px;}
+#showProject .task h4{padding:20px;background-color:#9caab0;cursor:pointer;}
+#showProject .task .notes{background-color:#d5dbdd;}
+#showProject .task .note{border-bottom:1px solid #b8c2c7;position:relative;}#showProject .task .note p{padding:5px 10px;margin:0 10px 5px;}
+#showProject .task .note .del{padding:5px 10px;position:absolute;right:0;top:0;text-indent:-9999px;}#showProject .task .note .del:hover{text-indent:initial;}
+#showProject .task .note:focus{outline:none;background-color:#e3e7e9;}
+#showProject .new{padding:10px;background-color:#9caab0;display:inline-block;width:auto;}
+.thumb{display:block;width:200px;height:200px;border:1px solid #667880;margin-bottom:10px;background:url(images/default.png) center center no-repeat;}.thumb img{width:100%;height:100%;}
+form{box-sizing:border-box;padding:15px;color:#d5dbdd;}form div{width:300px;float:left;padding:10px;}
+form label{display:block;margin-right:15px;}
+form input,form textarea,form select{box-sizing:border-box;font-size:0.9em;color:#394347;margin:5px 0;padding:5px;border-radius:3px;width:100%;border:1px solid #4f5d64;background-color:#f1f3f4;}
+form textarea{width:100%;display:block;height:165px;}
+form select{height:29px;}
+form .well{background-color:#f1f3f4;padding:10px;color:#22282b;float:right;width:200px;margin:32px;}
+form hr{display:block;width:100%;}
+form input[type='submit']{background-color:#394347;color:#d5dbdd;border:1px solid #9caab0;clear:both;width:auto;cursor:pointer;}
+form .close{float:right;height:25px;width:25px;background:url('images/cross.png') center center no-repeat;margin:5px 0;cursor:pointer;}
