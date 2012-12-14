@@ -1,6 +1,13 @@
-/*global Backbone, _ */
+/*global Backbone, _, dateFormat */
 /*jshint devel:true */
 /*jshint bitwise:false */
+
+$('body').ajaxStart(function(){
+    $(this).addClass('loading');
+});
+$('body').ajaxStop(function(){
+    $(this).removeClass('loading');
+});
 
 /* -------------------------------------- */
 /*           View Helper                  */
@@ -50,6 +57,22 @@ var App = {
         
         Backbone.history.start();
         
+    },
+    statusList : {
+        '1' : 'Started',
+        '2' : '10%',
+        '3' : '20%',
+        '4' : '30%',
+        '5' : '40%',
+        '6' : '50%',
+        '7' : '60%',
+        '8' : '70%',
+        '9' : '80%',
+        '10' : '90%',
+        '11' : 'Ready',
+        '12' : 'Launched',
+        '14' : 'Postponed',
+        '0'  : 'Stopped'
     }
 };
 
@@ -60,9 +83,7 @@ var App = {
 App.Routes = Backbone.Router.extend({
     routes: {
         ""                  : "home",
-        ":id"               : "showProject",
-        "users"             : "showUsers",
-        "login"             : "showLogin"
+        ":id"               : "showProject"
     },
     home: function () {
         RegionManager.show(new App.View.Home({collection: App.projects}));
@@ -70,16 +91,6 @@ App.Routes = Backbone.Router.extend({
     },
     showProject: function (id) {
         RegionManager.show(new App.View.ShowProject({model: App.projects.get(id)}));
-    },
-    showUsers: function () {
-        var items = new App.Collection.Items();
-        items.fetch({data: {name: 'news', url: 'http://www.message.org.uk/category/news/feed/'}});
-        RegionManager.show(new App.View.Items({collection: items, title: "News"}));
-    },
-    showLogin: function () {
-        var items = new App.Collection.Items();
-        items.fetch({data: {name: 'flow', url: 'http://podcast.message.org.uk/feed/flowpodcast'}});
-        RegionManager.show(new App.View.Items({collection: items, title: "Flow", type: "podcast"}));
     }
 });
 
@@ -88,7 +99,6 @@ App.Routes = Backbone.Router.extend({
 /* -------------------------------------- */
 
 App.Model.Project = Backbone.Model.extend({
-    url: '/projects',
     defaults: {
         'name'         : 'New Project'
     },
@@ -100,10 +110,14 @@ App.Model.Project = Backbone.Model.extend({
 });
 App.Collection.Projects = Backbone.Collection.extend({
     model: App.Model.Project,
-    url: '/projects'
+    url: 'projects'
 });
 
-App.Model.Task = Backbone.Model.extend({});
+App.Model.Task = Backbone.Model.extend({
+    defaults: {
+        'percent' : 1
+    }
+});
 App.Collection.Tasks = Backbone.Collection.extend({
     model: App.Model.Task,
     url: 'tasks'
@@ -111,7 +125,7 @@ App.Collection.Tasks = Backbone.Collection.extend({
 
 App.Model.Note = Backbone.Model.extend({
     defaults: {
-        'text' : ''
+        'text'       : ''
     },
     collection: App.Collection.Notes
 });
@@ -170,18 +184,20 @@ App.View.ProjectMenuItem = Backbone.View.extend({
     className: 'ProjectMenuItem',
     template: _.template($('#ProjectMenuItem').html()),
     events: {
-        'click'  : 'navigate',
-        'keydown h2' : 'stop'
+        'click h2'     : 'navigate',
+        'keydown h2'   : 'stop',
+        'blur h2'      : 'blur',
+        'click .delete' : 'removeProject'
     },
     initialize: function () {
         _.bindAll(this, 'edit', 'stop');
         this.on('edit', this.edit, this);
-        this.on('blur', 'h2', function () {
-            $(this).attr('contentEditable', 'false');
-        });
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
+        if (this.model.isNew()) {
+            this.$el.addClass('editing');
+        }
         return this;
     },
     navigate: function (e) {
@@ -192,10 +208,15 @@ App.View.ProjectMenuItem = Backbone.View.extend({
     edit: function () {
         this.$('h2').attr('contentEditable', 'true').focus();
     },
-    stop: function (e) {
+    blur: function  () {
+        this.$('h2').attr('contentEditable', 'false');
+        if (this.model.isNew() || this.$('h2').text() === 'untitled project'){
+            this.removeProject();
+        }
+    },
+    stop: function (e) {        
         // if return is pressed blur out
         if (e.which === 13) {
-            e.target.blur();
             e.preventDefault();
             this.saveModel();
         }
@@ -204,15 +225,18 @@ App.View.ProjectMenuItem = Backbone.View.extend({
             document.execCommand('undo');
             e.target.blur();
             e.preventDefault();
-            
-            if ( this.model.isNew() ) {
-                this.removeProject();
-            }
         }
     },
     saveModel: function () {
         var newProject = this.$('h2').text();
-        this.model.save({name: newProject});
+        
+        // if project still has default name
+        if (newProject === 'untitled project') {
+            this.$('h2').blur();
+            return;
+        }
+        this.model.save({name: newProject}, {success: function () {this.$('h2').blur();}});
+        this.$el.removeClass('editing');
     },
     removeProject: function (e) {
         if (e) e.preventDefault();
@@ -230,7 +254,8 @@ App.View.ShowProject = Backbone.View.extend({
     id: 'showProject',
     template: _.template($('#showProjectTemplate').html()),
     events: {
-        'click .new'     : 'addNewTask'
+        'click .new'     : 'addNewTask',
+        'click .back'    : 'home'
     },
     initialize: function () {
         _.bindAll(this, 'loadTasks');
@@ -268,6 +293,10 @@ App.View.ShowProject = Backbone.View.extend({
         newtask.collection = this.collection;
         this.addTask(newtask);
     },
+    home: function (e) {
+        e.preventDefault();
+        Backbone.history.navigate('', {trigger: true});
+    },
     close: function(){
         this.remove();
         this.unbind();
@@ -279,16 +308,21 @@ App.View.Task = Backbone.View.extend({
     className: 'task',
     template: _.template($('#taskTemplate').html()),
     events: {
-        'click h4' : 'toggleNotes',
-        'keydown h4' : 'stop'
+        'click h4'             : 'toggleNotes',
+        'keydown h4'           : 'stop',
+        'change .statusSelect' : 'changeStatus'
     },
     initialize: function () {
         _.bindAll(this, 'loadNotes', 'hideNotes', 'addNote', 'edit');
+        
         this.on('edit', this.edit, this);
+        this.model.on('change:percent', this.setStatus, this);
+        
         this.notesShown = false;
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
+        this.setStatus();
         return this;
     },
     toggleNotes: function () {
@@ -321,7 +355,6 @@ App.View.Task = Backbone.View.extend({
     },
     loadNotes: function(collection) {
         collection.each(this.addNote);
-
         this.addBlank(collection);
     },
     addNote: function (model) {
@@ -338,6 +371,15 @@ App.View.Task = Backbone.View.extend({
         blankNote.on('sync', this.addBlank, this);
 
         this.addNote(blankNote);
+    },
+    changeStatus: function  () {
+        var newstatus = this.$('.statusSelect').val();
+        this.model.save({percent: newstatus});
+    },
+    setStatus: function () {
+        var percent = this.model.get('percent');
+        this.$('.status').text(App.statusList[percent]);
+        console.log(percent, App.statusList[percent]) ;
     },
     edit: function () {
         this.$('h4').attr('contentEditable', 'true').focus();
@@ -386,7 +428,13 @@ App.View.Note = Backbone.View.extend({
         _.bindAll(this, 'saveText', 'stop');
     },
     render: function () {
-        this.$el.html(this.template(this.model.toJSON()));
+        var json = this.model.toJSON();
+        if (this.model.isNew()) {
+            json.created_at = ""
+        } else {
+            json.created_at = dateFormat(json.created_at, "dS mmm yy");   
+        }
+        this.$el.html(this.template(json));
         return this;
     },
     saveText: function () {

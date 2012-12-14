@@ -72,7 +72,14 @@ end
 #new project
 post '/projects' do
     newProject = JSON.parse(request.body.read.to_s)
-    Project.create(newProject)
+    p = Project.create(newProject)
+    p.to_json
+end
+
+#delete project
+delete '/projects/:id' do
+    project_to_delete = Project.get(params[:id])
+    project_to_delete.destroy
 end
 
 #get tasks
@@ -87,6 +94,14 @@ post '/tasks' do
     newTask = JSON.parse(request.body.read.to_s)
     project = Project.get(newTask['project_id'])
     project.tasks.create(newTask)
+end
+
+#update task
+put '/tasks/:id' do
+    req = JSON.parse(request.body.read.to_s)
+    taskToUpdate = Task.get(req['id'])
+    a = taskToUpdate.update(req)
+    a.to_json
 end
 
 # get notes
@@ -107,7 +122,8 @@ end
 post '/notes' do
     newNote = JSON.parse(request.body.read.to_s)
     task = Task.get(newNote['task_id'])
-    task.notes.create(newNote)
+    n = task.notes.create(newNote)
+    n.to_json
 end
 
 delete '/notes/:id' do
