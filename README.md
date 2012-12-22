@@ -5,3 +5,4 @@
 * nice styling by Jonathan
 * people icons and note ownership
 * timestamps
+* percentage calculation and display for project

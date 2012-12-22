@@ -120,7 +120,31 @@ App.Model.Task = Backbone.Model.extend({
 });
 App.Collection.Tasks = Backbone.Collection.extend({
     model: App.Model.Task,
-    url: 'tasks'
+    url: 'tasks',
+    initialize: function  () {
+        this.on('change:percent', this.calculateTotalPercentage);
+        this.on('reset', this.calculateTotalPercentage);
+    },
+    calculateTotalPercentage: function  () {
+        var taskarray = this.pluck('percent');
+        var newarray = _.filter(taskarray, function (value) {
+            return _.indexOf([2,3,4,5,6,7,8,9,10], parseInt(value, 10)) >= 0;
+        });
+
+        var array_to_calculate = _.map(newarray, function (el, i) {
+            var a = App.statusList[parseInt(el, 10)].slice(0,-1);
+            return parseInt(a, 10);
+        });
+
+        var total = _.reduce(array_to_calculate, function (memo, num) {
+            return memo + num;
+        }, 0);
+
+        this.total = Math.round( total / (newarray.length * 100) * 100 );
+        this.trigger('totalchange', this.total);
+
+        // TODO: if 0, and Ready needs changing to 100%
+    }
 });
 
 App.Model.Note = Backbone.Model.extend({
@@ -214,7 +238,7 @@ App.View.ProjectMenuItem = Backbone.View.extend({
             this.removeProject();
         }
     },
-    stop: function (e) {        
+    stop: function (e) {
         // if return is pressed blur out
         if (e.which === 13) {
             e.preventDefault();
@@ -268,6 +292,8 @@ App.View.ShowProject = Backbone.View.extend({
                 success: this.loadTasks
             }
         );
+
+        this.collection.on('totalchange', this.setTotal, this);
     },
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
@@ -280,7 +306,7 @@ App.View.ShowProject = Backbone.View.extend({
     addTask: function (model) {
         var task = new App.View.Task({model: model});
         this.$('.projectTasks').append(task.render().el);
-        if (task.model.isNew()) { 
+        if (task.model.isNew()) {
             task.trigger('edit');
         }
     },
@@ -292,6 +318,9 @@ App.View.ShowProject = Backbone.View.extend({
         });
         newtask.collection = this.collection;
         this.addTask(newtask);
+    },
+    setTotal: function (val) {
+        this.$('.total').text(val);
     },
     home: function (e) {
         e.preventDefault();
@@ -310,7 +339,8 @@ App.View.Task = Backbone.View.extend({
     events: {
         'click h4'             : 'toggleNotes',
         'keydown h4'           : 'stop',
-        'change .statusSelect' : 'changeStatus'
+        'change .statusSelect' : 'changeStatus',
+        'blur h4'              : 'blur'
     },
     initialize: function () {
         _.bindAll(this, 'loadNotes', 'hideNotes', 'addNote', 'edit');
@@ -379,13 +409,18 @@ App.View.Task = Backbone.View.extend({
     setStatus: function () {
         var percent = this.model.get('percent');
         this.$('.status').text(App.statusList[percent]);
-        console.log(percent, App.statusList[percent]) ;
     },
     edit: function () {
         this.$('h4').attr('contentEditable', 'true').focus();
         this.$('h4').on('blur', function () {
             $(this).attr('contentEditable', 'false');
         });
+    },
+    blur: function  () {
+        this.$('h4').attr('contentEditable', 'false');
+        if (this.model.isNew() || this.$('h4').text() === 'untitled task'){
+            this.removeTask();
+        }
     },
     stop: function (e) {
         // if return is pressed blur out

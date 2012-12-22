@@ -22,6 +22,7 @@
             <div class="projectInfo">
                 <h2><a class="back" href="#">&larr;</a> <%= name %></h2> 
             </div>
+            <span class="total"></span>
             <div class="projectTasks"></div>
             <a href="#" class="new">+</a>
     	</div>
@@ -31,20 +32,13 @@
     	<h4><%= name %></h4>
         <div class="status">Cheese</div>
         <select name="status" class="statusSelect">
-            <option value="1">Started</option>
-            <option value="2">10%</option>
-            <option value="3">20%</option>
-            <option value="4">30%</option>
-            <option value="5">40%</option>
-            <option value="6">50%</option>
-            <option value="7">60%</option>
-            <option value="8">70%</option>
-            <option value="9">80%</option>
-            <option value="10">90%</option>
-            <option value="11">Ready</option>
-            <option value="12">Launched</option>
-            <option value="14">Postponed</option>
-            <option value="0">Stopped</option>
+            <% _(App.statusList).each(function(value, key) { %>
+                <option
+                    <% if (percent == key) { %> selected="selected" <% } %>
+                    value="<%= key %>">
+                        <%= value %>
+                </option>
+            <% }); %>
         </select>
         <div class="notes"></div>
 	</script>
