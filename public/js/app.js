@@ -126,12 +126,20 @@ App.Collection.Tasks = Backbone.Collection.extend({
         this.on('reset', this.calculateTotalPercentage);
     },
     calculateTotalPercentage: function  () {
+        // get percents from array of tasks
         var taskarray = this.pluck('percent');
+        
+        // filter the array for 10-90%, and Ready
         var newarray = _.filter(taskarray, function (value) {
-            return _.indexOf([2,3,4,5,6,7,8,9,10], parseInt(value, 10)) >= 0;
+            return _.indexOf([2,3,4,5,6,7,8,9,10,11], parseInt(value, 10)) >= 0;
         });
 
+        // change the array to integers
         var array_to_calculate = _.map(newarray, function (el, i) {
+            // if 11 (i.e. Ready) return 100;
+            if ( el === "11" ) return 100;
+            
+            // else chop off the percent sign and change to integer
             var a = App.statusList[parseInt(el, 10)].slice(0,-1);
             return parseInt(a, 10);
         });
@@ -143,7 +151,7 @@ App.Collection.Tasks = Backbone.Collection.extend({
         this.total = Math.round( total / (newarray.length * 100) * 100 );
         this.trigger('totalchange', this.total);
 
-        // TODO: if 0, and Ready needs changing to 100%
+        // TODO: if 0
     }
 });
 
