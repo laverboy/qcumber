@@ -208,10 +208,11 @@ App.View.ProjectMenuItem = Backbone.View.extend({
     className: 'ProjectMenuItem',
     template: _.template($('#ProjectMenuItem').html()),
     events: {
-        'click h2'     : 'navigate',
-        'keydown h2'   : 'stop',
-        'blur h2'      : 'blur',
-        'click .delete' : 'removeProject'
+        'click h2'      : 'navigate',
+        'keydown h2'    : 'stop',
+        'blur h2'       : 'blur',
+        'click .delete' : 'removeProject',
+        'click .edit'   : 'edit'
     },
     initialize: function () {
         _.bindAll(this, 'edit', 'stop');

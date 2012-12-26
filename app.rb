@@ -76,6 +76,14 @@ post '/projects' do
     p.to_json
 end
 
+#edit project
+put '/projects/:id' do
+    req = JSON.parse(request.body.read.to_s)
+    project_to_update = Project.get(params[:id])
+    a = project_to_update.update(req)
+    a.to_json
+end
+
 #delete project
 delete '/projects/:id' do
     project_to_delete = Project.get(params[:id])
