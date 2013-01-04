@@ -349,7 +349,9 @@ App.View.Task = Backbone.View.extend({
         'click h4'             : 'toggleNotes',
         'keydown h4'           : 'stop',
         'change .statusSelect' : 'changeStatus',
-        'blur h4'              : 'blur'
+        'blur h4'              : 'blur',
+        'click .edit'          : 'edit',
+        'click .delete'        : 'removeTask'
     },
     initialize: function () {
         _.bindAll(this, 'loadNotes', 'hideNotes', 'addNote', 'edit');

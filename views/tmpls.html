@@ -29,8 +29,10 @@
 	</script>
 	
 	<script type="text/template" id="taskTemplate">
-    	<h4><%= name %></h4>
-        <div class="status">Cheese</div>
+    	<a class="delete"></a>
+        <a class="edit"></a>
+        <h4><%= name %></h4>
+        <div class="status"></div>
         <select name="status" class="statusSelect">
             <% _(App.statusList).each(function(value, key) { %>
                 <option
@@ -46,5 +48,5 @@
     <script type="text/template" id="noteTemplate">
         <p contentEditable="true" ><%= text %></p>
         <small><%= created_at %></small>
-        <a class="del" href="#">-</a>
+        <a class="delete"></a>
     </script>

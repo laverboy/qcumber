@@ -69,14 +69,18 @@ get '/' do
     erb :index
 end
 
-#new project
+# ---------------
+# Projects
+# ---------------
+
+# create
 post '/projects' do
     newProject = JSON.parse(request.body.read.to_s)
     p = Project.create(newProject)
     p.to_json
 end
 
-#edit project
+# update
 put '/projects/:id' do
     req = JSON.parse(request.body.read.to_s)
     project_to_update = Project.get(params[:id])
@@ -84,27 +88,31 @@ put '/projects/:id' do
     a.to_json
 end
 
-#delete project
+# delete
 delete '/projects/:id' do
     project_to_delete = Project.get(params[:id])
     project_to_delete.destroy
 end
 
-#get tasks
-get '/tasks' do
-    content_type :json
-    project = Project.get(params[:id])
-    project.tasks.all.to_json
-end
+# ---------------
+# Tasks
+# ---------------
 
-#new task
+# create
 post '/tasks' do
     newTask = JSON.parse(request.body.read.to_s)
     project = Project.get(newTask['project_id'])
     project.tasks.create(newTask)
 end
 
-#update task
+# read
+get '/tasks' do
+    content_type :json
+    project = Project.get(params[:id])
+    project.tasks.all.to_json
+end
+
+# update
 put '/tasks/:id' do
     req = JSON.parse(request.body.read.to_s)
     taskToUpdate = Task.get(req['id'])
@@ -112,21 +120,17 @@ put '/tasks/:id' do
     a.to_json
 end
 
-# get notes
-get '/notes' do
-    content_type :json
-    task = Task.get(params[:id])
-    task.notes.all.to_json
+# delete
+delete '/tasks/:id' do
+    task_to_delete = Task.get(params[:id])
+    task_to_delete.destroy
 end
 
-# update note change
-put '/notes/:id' do 
-    newNote = JSON.parse(request.body.read.to_s)
-    note = Note.get(newNote['id'])
-    note.update(newNote)
-end
+# ---------------
+# Notes
+# ---------------
 
-# new note
+# create
 post '/notes' do
     newNote = JSON.parse(request.body.read.to_s)
     task = Task.get(newNote['task_id'])
@@ -134,6 +138,20 @@ post '/notes' do
     n.to_json
 end
 
+# read
+get '/notes' do
+    content_type :json
+    task = Task.get(params[:id])
+    task.notes.all.to_json
+end
+
+# update
+put '/notes/:id' do 
+    newNote = JSON.parse(request.body.read.to_s)
+    note = Note.get(newNote['id'])
+    note.update(newNote)
+end
+ # delete
 delete '/notes/:id' do
     note = Note.get(params[:id])
     note.destroy
